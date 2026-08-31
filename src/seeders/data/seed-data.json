@@ -1,0 +1,130 @@
+{
+  "users": [
+    {
+      "name": "Admin Principal",
+      "email": "admin@rimimedicare.com",
+      "password": "admin123",
+      "role": "admin"
+    },
+    {
+      "name": "Gestor Carlos López",
+      "email": "carlos@rimimedicare.com",
+      "password": "gestor123",
+      "role": "gestor"
+    },
+    {
+      "name": "Gestor María García",
+      "email": "maria@rimimedicare.com",
+      "password": "gestor123",
+      "role": "gestor"
+    }
+  ],
+  "clinics": [
+    {
+      "name": "Clínica San Rafael",
+      "nit": "900123456-1",
+      "address": "Calle 10 #5-20, Bogotá",
+      "phone": "3001234567",
+      "responsibleId": 2
+    },
+    {
+      "name": "Centro Médico Vida Nueva",
+      "nit": "900654321-2",
+      "address": "Carrera 15 #40-10, Medellín",
+      "phone": "3009876543",
+      "responsibleId": 3
+    },
+    {
+      "name": "Clínica Del Norte",
+      "nit": "900789123-3",
+      "address": "Avenida 68 #25-30, Cali",
+      "phone": "3012345678",
+      "responsibleId": 2
+    }
+  ],
+  "warehouses": [
+    {
+      "name": "Almacén Central Bogotá",
+      "location": "Zona Industrial, Bogotá",
+      "responsibleId": 1
+    },
+    {
+      "name": "Almacén Regional Medellín",
+      "location": "Zona Franca, Medellín",
+      "responsibleId": 1
+    }
+  ],
+  "medications": [
+    {
+      "name": "Paracetamol 500mg",
+      "description": "Analgésico y antipirético en tabletas",
+      "unitPrice": 2500.00
+    },
+    {
+      "name": "Amoxicilina 250mg",
+      "description": "Antibiótico de amplio espectro",
+      "unitPrice": 8500.00
+    },
+    {
+      "name": "Ibuprofeno 400mg",
+      "description": "Antiinflamatorio no esteroideo",
+      "unitPrice": 3200.00
+    },
+    {
+      "name": "Omeprazol 20mg",
+      "description": "Inhibidor de la bomba de protones",
+      "unitPrice": 5600.00
+    },
+    {
+      "name": "Loratadina 10mg",
+      "description": "Antihistamínico para alergias",
+      "unitPrice": 4100.00
+    }
+  ],
+  "stocks": [
+    {
+      "warehouseId": 1,
+      "medicationId": 1,
+      "stock": 500
+    },
+    {
+      "warehouseId": 1,
+      "medicationId": 2,
+      "stock": 200
+    },
+    {
+      "warehouseId": 1,
+      "medicationId": 3,
+      "stock": 350
+    },
+    {
+      "warehouseId": 2,
+      "medicationId": 1,
+      "stock": 300
+    },
+    {
+      "warehouseId": 2,
+      "medicationId": 4,
+      "stock": 150
+    },
+    {
+      "warehouseId": 2,
+      "medicationId": 5,
+      "stock": 100
+    }
+  ],
+  "supplyRequests": [
+    {
+      "clinicId": 1,
+      "medicationId": 1,
+      "quantity": 50,
+      "warehouseId": 1
+    },
+    {
+      "clinicId": 2,
+      "medicationId": 3,
+      "quantity": 30,
+      "warehouseId": 1
+    }
+  ]
+}
