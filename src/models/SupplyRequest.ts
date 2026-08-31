@@ -1,10 +1,12 @@
+
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../config/database';
 import { RequestStatus } from '../types';
 
 /**
- * Modelo de solicitud de abastecimiento.
- * Registra las solicitudes de medicamentos realizadas por clínicas.
+ * Supply request model.
+ *
+ * Records medication supply requests made by clinics.
  */
 class SupplyRequest extends Model {
   public id!: number;
@@ -84,3 +86,4 @@ SupplyRequest.init(
 );
 
 export default SupplyRequest;
+

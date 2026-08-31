@@ -1,3 +1,4 @@
+
 import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { AuthRequest, TokenPayload } from '../types';
@@ -5,8 +6,14 @@ import { AuthRequest, TokenPayload } from '../types';
 const JWT_SECRET = process.env.JWT_SECRET || 'default_secret';
 
 /**
- * Middleware que verifica la autenticación JWT.
- * Decodifica el token y adjunta el payload al request.
+ * Middleware that verifies JWT authentication.
+ *
+ * Extracts and validates the Bearer token from the request headers,
+ * then attaches the decoded token payload to the request.
+ *
+ * @param req - Express authenticated request.
+ * @param res - Express response used to return authentication errors.
+ * @param next - Callback that passes control to the next middleware.
  */
 export const authenticate = (req: AuthRequest, res: Response, next: NextFunction): void => {
   const authHeader = req.headers.authorization;
@@ -26,3 +33,4 @@ export const authenticate = (req: AuthRequest, res: Response, next: NextFunction
     res.status(401).json({ message: 'Token inválido o expirado' });
   }
 };
+

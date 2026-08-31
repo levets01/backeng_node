@@ -1,15 +1,12 @@
+
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../config/database';
 
-
 /**
-
-* Drug model.
-
-* Represents the drugs available in the system.
-
-*/
-
+ * Medication model.
+ *
+ * Represents the medications available in the system.
+ */
 class Medication extends Model {
   public id!: number;
   public name!: string;
@@ -53,3 +50,4 @@ Medication.init(
 );
 
 export default Medication;
+

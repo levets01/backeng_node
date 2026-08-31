@@ -1,10 +1,15 @@
+
 import { Response } from 'express';
 import Clinic from '../models/Clinic';
 import User from '../models/User';
 import { AuthRequest, CreateClinicDTO } from '../types';
 
 /**
- * Obtiene todas las clínicas activas.
+ * Retrieves all active clinics.
+ *
+ * @param _req - Express authenticated request.
+ * @param res - Express response used to return the clinics.
+ * @returns A promise that resolves when the operation is completed.
  */
 export const getClinics = async (_req: AuthRequest, res: Response): Promise<void> => {
   try {
@@ -19,7 +24,11 @@ export const getClinics = async (_req: AuthRequest, res: Response): Promise<void
 };
 
 /**
- * Obtiene una clínica por ID.
+ * Retrieves an active clinic by its ID.
+ *
+ * @param req - Express authenticated request containing the clinic ID.
+ * @param res - Express response used to return the clinic.
+ * @returns A promise that resolves when the operation is completed.
  */
 export const getClinicById = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
@@ -39,8 +48,14 @@ export const getClinicById = async (req: AuthRequest, res: Response): Promise<vo
 };
 
 /**
- * Crea una nueva clínica.
- * Valida que no exista otra clínica con el mismo NIT.
+ * Creates a new clinic.
+ *
+ * Validates that no other clinic exists with the same NIT
+ * and that the assigned responsible user is active.
+ *
+ * @param req - Express authenticated request containing clinic data.
+ * @param res - Express response used to return the created clinic.
+ * @returns A promise that resolves when the operation is completed.
  */
 export const createClinic = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
@@ -66,7 +81,14 @@ export const createClinic = async (req: AuthRequest, res: Response): Promise<voi
 };
 
 /**
- * Actualiza una clínica existente.
+ * Updates an existing clinic.
+ *
+ * Validates the NIT if it is changed to ensure it is not already
+ * associated with another clinic.
+ *
+ * @param req - Express authenticated request containing the clinic ID and updated data.
+ * @param res - Express response used to return the updated clinic.
+ * @returns A promise that resolves when the operation is completed.
  */
 export const updateClinic = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
@@ -94,7 +116,11 @@ export const updateClinic = async (req: AuthRequest, res: Response): Promise<voi
 };
 
 /**
- * Elimina lógicamente una clínica (marca isActive = false).
+ * Soft-deletes an existing clinic by setting its active status to false.
+ *
+ * @param req - Express authenticated request containing the clinic ID.
+ * @param res - Express response used to return the operation result.
+ * @returns A promise that resolves when the operation is completed.
  */
 export const deleteClinic = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
@@ -110,3 +136,4 @@ export const deleteClinic = async (req: AuthRequest, res: Response): Promise<voi
     res.status(500).json({ message: 'Error al eliminar clínica', error: (error as Error).message });
   }
 };
+

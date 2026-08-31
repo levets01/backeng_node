@@ -1,3 +1,4 @@
+
 import { Response } from 'express';
 import Medication from '../models/Medication';
 import WarehouseMedication from '../models/WarehouseMedication';
@@ -5,7 +6,11 @@ import Warehouse from '../models/Warehouse';
 import { AuthRequest, CreateMedicationDTO, AssignStockDTO } from '../types';
 
 /**
- * Obtiene todos los medicamentos activos.
+ * Retrieves all active medications.
+ *
+ * @param _req - Express authenticated request.
+ * @param res - Express response used to return the medications.
+ * @returns A promise that resolves when the operation is completed.
  */
 export const getMedications = async (_req: AuthRequest, res: Response): Promise<void> => {
   try {
@@ -17,7 +22,11 @@ export const getMedications = async (_req: AuthRequest, res: Response): Promise<
 };
 
 /**
- * Obtiene un medicamento por ID con su stock en almacenes.
+ * Retrieves an active medication by ID, including its warehouse stock.
+ *
+ * @param req - Express authenticated request containing the medication ID.
+ * @param res - Express response used to return the medication details.
+ * @returns A promise that resolves when the operation is completed.
  */
 export const getMedicationById = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
@@ -45,7 +54,11 @@ export const getMedicationById = async (req: AuthRequest, res: Response): Promis
 };
 
 /**
- * Crea un nuevo medicamento.
+ * Creates a new medication.
+ *
+ * @param req - Express authenticated request containing the medication data.
+ * @param res - Express response used to return the created medication.
+ * @returns A promise that resolves when the operation is completed.
  */
 export const createMedication = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
@@ -58,7 +71,11 @@ export const createMedication = async (req: AuthRequest, res: Response): Promise
 };
 
 /**
- * Actualiza un medicamento existente.
+ * Updates an existing medication.
+ *
+ * @param req - Express authenticated request containing the medication ID and updated data.
+ * @param res - Express response used to return the updated medication.
+ * @returns A promise that resolves when the operation is completed.
  */
 export const updateMedication = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
@@ -76,7 +93,11 @@ export const updateMedication = async (req: AuthRequest, res: Response): Promise
 };
 
 /**
- * Elimina lógicamente un medicamento.
+ * Soft-deletes an existing medication by setting its active status to false.
+ *
+ * @param req - Express authenticated request containing the medication ID.
+ * @param res - Express response used to return the operation result.
+ * @returns A promise that resolves when the operation is completed.
  */
 export const deleteMedication = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
@@ -94,7 +115,14 @@ export const deleteMedication = async (req: AuthRequest, res: Response): Promise
 };
 
 /**
- * Asigna stock de un medicamento a un almacén.
+ * Assigns medication stock to a warehouse.
+ *
+ * Creates a new warehouse-medication stock record if one does not exist,
+ * or updates the existing stock quantity.
+ *
+ * @param req - Express authenticated request containing the warehouse, medication, and stock data.
+ * @param res - Express response used to return the stock assignment result.
+ * @returns A promise that resolves when the operation is completed.
  */
 export const assignStock = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
@@ -131,3 +159,4 @@ export const assignStock = async (req: AuthRequest, res: Response): Promise<void
     res.status(500).json({ message: 'Error al asignar stock', error: (error as Error).message });
   }
 };
+

@@ -1,9 +1,12 @@
+
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../config/database';
 
 /**
- * Modelo de almacén.
- * Cada almacén tiene un responsable y puede contener múltiples medicamentos con stock.
+ * Warehouse model.
+ *
+ * Each warehouse has an assigned responsible user and can contain
+ * multiple medications with available stock.
  */
 class Warehouse extends Model {
   public id!: number;
@@ -52,3 +55,4 @@ Warehouse.init(
 );
 
 export default Warehouse;
+

@@ -1,3 +1,4 @@
+
 import { DataTypes, Model } from 'sequelize';
 import bcrypt from 'bcryptjs';
 
@@ -15,6 +16,11 @@ export interface UserAttributes {
   updatedAt: Date;
 }
 
+/**
+ * User model.
+ *
+ * Represents system users and their authentication information.
+ */
 class User extends Model implements UserAttributes {
   declare id: number;
   declare name: string;
@@ -25,6 +31,11 @@ class User extends Model implements UserAttributes {
   declare createdAt: Date;
   declare updatedAt: Date;
 
+  /**
+   * Hashes the user's password using bcrypt.
+   *
+   * @returns A promise that resolves when the password has been hashed.
+   */
   public async hashPassword(): Promise<void> {
     if (!this.password) {
       throw new Error('La contraseña es obligatoria');
@@ -33,6 +44,12 @@ class User extends Model implements UserAttributes {
     this.password = await bcrypt.hash(this.password, 10);
   }
 
+  /**
+   * Validates a plain-text password against the stored hashed password.
+   *
+   * @param password - Plain-text password to validate.
+   * @returns A promise that resolves to true if the password is valid, otherwise false.
+   */
   public async validatePassword(
     password: string
   ): Promise<boolean> {
@@ -103,3 +120,4 @@ User.init(
 );
 
 export default User;
+

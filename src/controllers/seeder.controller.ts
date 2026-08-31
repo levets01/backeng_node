@@ -7,10 +7,13 @@ import WarehouseMedication from '../models/WarehouseMedication';
 import SupplyRequest from '../models/SupplyRequest';
 import { AuthRequest, SeederPayload, CreateClinicDTO, CreateWarehouseDTO, CreateMedicationDTO } from '../types';
 
-/**
- * Endpoint semillero: carga datos iniciales desde un archivo JSON.
- * Recibe un archivo JSON con arrays de usuarios, clínicas, almacenes, medicamentos, stocks y solicitudes.
- */
+/** * Seeds initial system data from a JSON file. * 
+ * The uploaded file may contain arrays of users, clinics, warehouses, 
+ * medications, stock records, and supply requests. * 
+ * @param req - Express authenticated request containing the uploaded JSON file. 
+ *  @param res - Express response used to return the seeding results. 
+ *  @returns A promise that resolves when the data seeding process is completed. */
+
 export const seedData = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     if (!req.file) {

@@ -1,10 +1,15 @@
+
 import { Response } from 'express';
 import Warehouse from '../models/Warehouse';
 import User from '../models/User';
 import { AuthRequest, CreateWarehouseDTO } from '../types';
 
 /**
- * Obtiene todos los almacenes activos.
+ * Retrieves all active warehouses.
+ *
+ * @param _req - Express authenticated request.
+ * @param res - Express response used to return the warehouses.
+ * @returns A promise that resolves when the operation is completed.
  */
 export const getWarehouses = async (_req: AuthRequest, res: Response): Promise<void> => {
   try {
@@ -19,7 +24,11 @@ export const getWarehouses = async (_req: AuthRequest, res: Response): Promise<v
 };
 
 /**
- * Obtiene un almacén por ID.
+ * Retrieves an active warehouse by its ID.
+ *
+ * @param req - Express authenticated request containing the warehouse ID.
+ * @param res - Express response used to return the warehouse.
+ * @returns A promise that resolves when the operation is completed.
  */
 export const getWarehouseById = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
@@ -39,7 +48,13 @@ export const getWarehouseById = async (req: AuthRequest, res: Response): Promise
 };
 
 /**
- * Crea un nuevo almacén.
+ * Creates a new warehouse.
+ *
+ * Validates that the specified responsible user exists and is active.
+ *
+ * @param req - Express authenticated request containing the warehouse data.
+ * @param res - Express response used to return the created warehouse.
+ * @returns A promise that resolves when the operation is completed.
  */
 export const createWarehouse = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
@@ -59,7 +74,11 @@ export const createWarehouse = async (req: AuthRequest, res: Response): Promise<
 };
 
 /**
- * Actualiza un almacén existente.
+ * Updates an existing warehouse.
+ *
+ * @param req - Express authenticated request containing the warehouse ID and updated data.
+ * @param res - Express response used to return the updated warehouse.
+ * @returns A promise that resolves when the operation is completed.
  */
 export const updateWarehouse = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
@@ -77,7 +96,11 @@ export const updateWarehouse = async (req: AuthRequest, res: Response): Promise<
 };
 
 /**
- * Elimina lógicamente un almacén.
+ * Soft-deletes an existing warehouse by setting its active status to false.
+ *
+ * @param req - Express authenticated request containing the warehouse ID.
+ * @param res - Express response used to return the operation result.
+ * @returns A promise that resolves when the operation is completed.
  */
 export const deleteWarehouse = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
@@ -88,8 +111,9 @@ export const deleteWarehouse = async (req: AuthRequest, res: Response): Promise<
       return;
     }
     await warehouse.update({ isActive: false });
-    res.status(200).json({ message: 'Almacén eliminado exitosamente' });
+    res.status(200).json({ message: 'Almacén eliminado exitosamente', warehouse });
   } catch (error) {
     res.status(500).json({ message: 'Error al eliminar almacén', error: (error as Error).message });
   }
 };
+

@@ -1,9 +1,12 @@
+
 import { Response, NextFunction } from 'express';
 import { AuthRequest, UserRole } from '../types';
 
 /**
- * Middleware que verifica el rol del usuario.
- * @param allowedRoles - Roles permitidos para acceder al recurso
+ * Middleware that verifies the user's role.
+ *
+ * @param allowedRoles - Roles allowed to access the resource.
+ * @returns Express middleware that validates the authenticated user's role.
  */
 export const authorize = (...allowedRoles: UserRole[]) => {
   return (req: AuthRequest, res: Response, next: NextFunction): void => {
@@ -24,3 +27,4 @@ export const authorize = (...allowedRoles: UserRole[]) => {
     next();
   };
 };
+

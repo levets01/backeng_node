@@ -14,9 +14,13 @@ const VALID_TRANSITIONS: Record<RequestStatus, RequestStatus[]> = {
   cancelada: [],
 };
 
-/**
- * Obtiene todas las solicitudes activas.
- */
+/** * Retrieves all active supply requests. *
+ *  * @param _req - Express authenticated request. 
+ * * @param res - Express response used to return the supply requests. 
+ * * @returns A promise that resolves when the operation is completed. */
+
+
+
 export const getSupplyRequests = async (_req: AuthRequest, res: Response): Promise<void> => {
   try {
     const requests = await SupplyRequest.findAll({
@@ -35,9 +39,15 @@ export const getSupplyRequests = async (_req: AuthRequest, res: Response): Promi
   }
 };
 
-/**
- * Obtiene una solicitud por ID.
- */
+/** * Retrieves an active supply request by its ID. * 
+ * * @param req - Express authenticated request containing the request ID. 
+ * * @param res - Express response used to return the supply request. 
+ * * @returns A promise that resolves when the operation is completed. */
+
+
+
+
+
 export const getSupplyRequestById = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
@@ -60,10 +70,18 @@ export const getSupplyRequestById = async (req: AuthRequest, res: Response): Pro
   }
 };
 
-/**
- * Crea una nueva solicitud de abastecimiento.
- * Valida existencia de clínica, medicamento y disponibilidad de stock.
- */
+
+
+/** * Creates a new supply request. *
+ *  * Validates the existence of the clinic, medication, and warehouse, 
+ * * as well as the availability of the requested stock. * 
+ * * @param req - Express authenticated request containing the supply request data. 
+ * * @param res - Express response used to return the created request. 
+ * * @returns A promise that resolves when the operation is completed. */
+
+
+
+
 export const createSupplyRequest = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { clinicId, medicationId, quantity, warehouseId } = req.body as CreateSupplyRequestDTO;
@@ -121,10 +139,16 @@ export const createSupplyRequest = async (req: AuthRequest, res: Response): Prom
   }
 };
 
-/**
- * Actualiza el estado de una solicitud.
- * Valida las transiciones permitidas.
- */
+
+/** * Updates the status of an existing supply request. * 
+ * * Validates that the requested status transition is allowed 
+ * * according to the defined request workflow. * 
+ * * @param req - Express authenticated request containing the request ID and new status. 
+ * * @param res - Express response used to return the updated request. 
+ * * @returns A promise that resolves when the operation is completed. */
+
+
+
 export const updateSupplyRequestStatus = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
@@ -152,9 +176,11 @@ export const updateSupplyRequestStatus = async (req: AuthRequest, res: Response)
   }
 };
 
-/**
- * Obtiene el historial de solicitudes de una clínica.
- */
+/** * Retrieves the supply request history for an active clinic. * 
+ * * @param req - Express authenticated request containing the clinic ID. 
+ * * @param res - Express response used to return the clinic and its request history.
+ *  * @returns A promise that resolves when the operation is completed. */
+
 export const getRequestHistoryByClinic = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { clinicId } = req.params;
@@ -181,9 +207,12 @@ export const getRequestHistoryByClinic = async (req: AuthRequest, res: Response)
   }
 };
 
-/**
- * Elimina lógicamente una solicitud.
- */
+/** * Soft-deletes an existing supply request by setting its active status to false. * * @param req - Express authenticated request containing the request ID. 
+ * * @param res - Express response used to return the operation result.
+ *  * @returns A promise that resolves when the operation is completed. */
+
+
+
 export const deleteSupplyRequest = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { id } = req.params;

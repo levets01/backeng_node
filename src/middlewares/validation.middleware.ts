@@ -1,8 +1,14 @@
+
 import { Request, Response, NextFunction } from 'express';
 
 /**
- * Middleware de validación de datos de entrada.
- * Verifica que los campos requeridos estén presentes en el body.
+ * Middleware for validating required input fields.
+ *
+ * Checks whether the specified fields are present and have valid values
+ * in the request body.
+ *
+ * @param fields - List of required field names.
+ * @returns Express middleware that validates the required fields.
  */
 export const validateRequiredFields = (fields: string[]) => {
   return (req: Request, res: Response, next: NextFunction): void => {
@@ -24,7 +30,10 @@ export const validateRequiredFields = (fields: string[]) => {
 };
 
 /**
- * Valida que un valor sea un número entero positivo.
+ * Validates that a field contains a positive integer.
+ *
+ * @param fieldName - Name of the field to validate.
+ * @returns Express middleware that validates the specified field.
  */
 export const validatePositiveInteger = (fieldName: string) => {
   return (req: Request, res: Response, next: NextFunction): void => {
@@ -44,7 +53,14 @@ export const validatePositiveInteger = (fieldName: string) => {
 };
 
 /**
- * Valida que el NIT no esté duplicado.
+ * Validates that the NIT is unique.
+ *
+ * Checks whether a clinic with the specified NIT already exists.
+ *
+ * @param req - Express request containing the NIT in the request body.
+ * @param res - Express response used to return validation errors.
+ * @param next - Callback that passes control to the next middleware.
+ * @returns A promise that resolves when the validation is completed.
  */
 export const validateUniqueNIT = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { nit } = req.body;
@@ -58,3 +74,4 @@ export const validateUniqueNIT = async (req: Request, res: Response, next: NextF
   }
   next();
 };
+

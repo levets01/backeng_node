@@ -1,9 +1,11 @@
+
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../config/database';
 
 /**
- * Modelo de clínica.
- * Cada clínica tiene un NIT único y un responsable asignado.
+ * Clinic model.
+ *
+ * Each clinic has a unique NIT and an assigned responsible user.
  */
 class Clinic extends Model {
   public id!: number;
@@ -63,3 +65,4 @@ Clinic.init(
 );
 
 export default Clinic;
+

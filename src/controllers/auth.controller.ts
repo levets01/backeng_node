@@ -10,9 +10,13 @@ const JWT_SECRET: string =
 const JWT_EXPIRES_IN =
   process.env.JWT_EXPIRES_IN || '24h';
 
-/**
- * Registers a new user in the system.
- */
+/** * Registers a new user in the system. * * @param req - Express request containing the user registration data. 
+ * 
+ * 
+ * @param res - Express response used to return the registration result. 
+ * 
+ * * @returns A promise that resolves when the registration process is completed. 
+ * */
 export const register = async (
   req: Request<{}, {}, CreateUserDTO>,
   res: Response
@@ -81,9 +85,14 @@ export const register = async (
   }
 };
 
-/**
- * Inicia sesión de un usuario.
- */
+
+/** * Authenticates a user and returns a JWT token. * 
+  * @param req - Express request containing the user's login credentials. 
+ * @param res - Express response used to return the authentication result. 
+ * @returns A promise that resolves when the login process is completed. */
+
+
+
 export const login = async (
   req: Request<{}, {}, LoginUserDTO>,
   res: Response
@@ -156,9 +165,12 @@ export const login = async (
   }
 };
 
-/**
- * Obtiene todos los usuarios activos.
- */
+/** * Retrieves all active users from the system. 
+ *  @param _req - Express request object. 
+ * @param res - Express response used to return the list of users. 
+ * @returns A promise that resolves with the active users. */
+
+
 export const getUsers = async (
   _req: Request,
   res: Response

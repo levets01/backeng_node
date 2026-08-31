@@ -1,9 +1,11 @@
+
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../config/database';
 
 /**
- * Modelo de relación almacén-medicamento.
- * Almacena el stock de cada medicamento en cada almacén.
+ * Warehouse-medication relationship model.
+ *
+ * Stores the stock quantity of each medication available in each warehouse.
  */
 class WarehouseMedication extends Model {
   public id!: number;
@@ -66,3 +68,4 @@ WarehouseMedication.init(
 );
 
 export default WarehouseMedication;
+
