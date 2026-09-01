@@ -1,9 +1,7 @@
 
 import { Response } from 'express';
-import Medication from '../models/Medication';
-import WarehouseMedication from '../models/WarehouseMedication';
-import Warehouse from '../models/Warehouse';
-import { AuthRequest, CreateMedicationDTO, AssignStockDTO } from '../types';
+import { AuthRequest, CreateMedicationDTO } from '../types';
+import { medicationService } from '../services/medication.service';
 
 /**
  * Retrieves all active medications.
@@ -14,10 +12,12 @@ import { AuthRequest, CreateMedicationDTO, AssignStockDTO } from '../types';
  */
 export const getMedications = async (_req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const medications = await Medication.findAll({ where: { isActive: true } });
+    const medications = await medicationService.getAllMedications();
     res.status(200).json(medications);
-  } catch (error) {
-    res.status(500).json({ message: 'Error al obtener medicamentos', error: (error as Error).message });
+  } catch (error: any) {
+    const status = error?.status || 500;
+    const message = error?.message || 'Error al obtener medicamentos';
+    res.status(status).json({ message, error: error?.message });
   }
 };
 
@@ -31,25 +31,12 @@ export const getMedications = async (_req: AuthRequest, res: Response): Promise<
 export const getMedicationById = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-    const medication = await Medication.findOne({
-      where: { id, isActive: true },
-      include: [
-        {
-          model: WarehouseMedication,
-          as: 'stocks',
-          where: { isActive: true },
-          required: false,
-          include: [{ model: Warehouse, as: 'warehouse', attributes: ['id', 'name', 'location'] }],
-        },
-      ],
-    });
-    if (!medication) {
-      res.status(404).json({ message: 'Medicamento no encontrado' });
-      return;
-    }
+    const medication = await medicationService.getMedicationById(Number(id));
     res.status(200).json(medication);
-  } catch (error) {
-    res.status(500).json({ message: 'Error al obtener medicamento', error: (error as Error).message });
+  } catch (error: any) {
+    const status = error?.status || 500;
+    const message = error?.message || 'Error al obtener medicamento';
+    res.status(status).json({ message, error: error?.message });
   }
 };
 
@@ -62,11 +49,12 @@ export const getMedicationById = async (req: AuthRequest, res: Response): Promis
  */
 export const createMedication = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const { name, description, unitPrice } = req.body as CreateMedicationDTO;
-    const medication = await Medication.create({ name, description, unitPrice });
+    const medication = await medicationService.createMedication(req.body as CreateMedicationDTO);
     res.status(201).json({ message: 'Medicamento creado exitosamente', medication });
-  } catch (error) {
-    res.status(500).json({ message: 'Error al crear medicamento', error: (error as Error).message });
+  } catch (error: any) {
+    const status = error?.status || 500;
+    const message = error?.message || 'Error al crear medicamento';
+    res.status(status).json({ message, error: error?.message });
   }
 };
 
@@ -80,15 +68,12 @@ export const createMedication = async (req: AuthRequest, res: Response): Promise
 export const updateMedication = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-    const medication = await Medication.findOne({ where: { id, isActive: true } });
-    if (!medication) {
-      res.status(404).json({ message: 'Medicamento no encontrado' });
-      return;
-    }
-    await medication.update(req.body);
+    const medication = await medicationService.updateMedication(Number(id), req.body);
     res.status(200).json({ message: 'Medicamento actualizado exitosamente', medication });
-  } catch (error) {
-    res.status(500).json({ message: 'Error al actualizar medicamento', error: (error as Error).message });
+  } catch (error: any) {
+    const status = error?.status || 500;
+    const message = error?.message || 'Error al actualizar medicamento';
+    res.status(status).json({ message, error: error?.message });
   }
 };
 
@@ -102,61 +87,12 @@ export const updateMedication = async (req: AuthRequest, res: Response): Promise
 export const deleteMedication = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-    const medication = await Medication.findOne({ where: { id, isActive: true } });
-    if (!medication) {
-      res.status(404).json({ message: 'Medicamento no encontrado' });
-      return;
-    }
-    await medication.update({ isActive: false });
+    await medicationService.deleteMedication(Number(id));
     res.status(200).json({ message: 'Medicamento eliminado exitosamente' });
-  } catch (error) {
-    res.status(500).json({ message: 'Error al eliminar medicamento', error: (error as Error).message });
-  }
-};
-
-/**
- * Assigns medication stock to a warehouse.
- *
- * Creates a new warehouse-medication stock record if one does not exist,
- * or updates the existing stock quantity.
- *
- * @param req - Express authenticated request containing the warehouse, medication, and stock data.
- * @param res - Express response used to return the stock assignment result.
- * @returns A promise that resolves when the operation is completed.
- */
-export const assignStock = async (req: AuthRequest, res: Response): Promise<void> => {
-  try {
-    const { warehouseId, medicationId, stock } = req.body as AssignStockDTO;
-
-    if (stock < 0) {
-      res.status(400).json({ message: 'El stock no puede ser negativo' });
-      return;
-    }
-
-    const warehouse = await Warehouse.findOne({ where: { id: warehouseId, isActive: true } });
-    if (!warehouse) {
-      res.status(404).json({ message: 'Almacén no encontrado' });
-      return;
-    }
-
-    const medication = await Medication.findOne({ where: { id: medicationId, isActive: true } });
-    if (!medication) {
-      res.status(404).json({ message: 'Medicamento no encontrado' });
-      return;
-    }
-
-    const [existingStock, created] = await WarehouseMedication.findOrCreate({
-      where: { warehouseId, medicationId },
-      defaults: { warehouseId, medicationId, stock },
-    });
-
-    if (!created) {
-      await existingStock.update({ stock });
-    }
-
-    res.status(200).json({ message: 'Stock asignado exitosamente', warehouseMedication: existingStock });
-  } catch (error) {
-    res.status(500).json({ message: 'Error al asignar stock', error: (error as Error).message });
+  } catch (error: any) {
+    const status = error?.status || 500;
+    const message = error?.message || 'Error al eliminar medicamento';
+    res.status(status).json({ message, error: error?.message });
   }
 };
 
