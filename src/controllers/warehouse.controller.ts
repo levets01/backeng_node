@@ -86,6 +86,7 @@ export const updateWarehouse = async (req: AuthRequest, res: Response): Promise<
  * @param res - Express response used to return the operation result.
  * @returns A promise that resolves when the operation is completed.
  */
+
 export const deleteWarehouse = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
@@ -96,24 +97,4 @@ export const deleteWarehouse = async (req: AuthRequest, res: Response): Promise<
     const message = error?.message || 'Error al eliminar almacén';
     res.status(status).json({ message, error: error?.message });
   }
-};
- *
- * @param req - Express authenticated request containing the warehouse ID.
- * @param res - Express response used to return the operation result.
- * @returns A promise that resolves when the operation is completed.
- */
-export const deleteWarehouse = async (req: AuthRequest, res: Response): Promise<void> => {
-  try {
-    const { id } = req.params;
-    const warehouse = await Warehouse.findOne({ where: { id, isActive: true } });
-    if (!warehouse) {
-      res.status(404).json({ message: 'Almacén no encontrado' });
-      return;
-    }
-    await warehouse.update({ isActive: false });
-    res.status(200).json({ message: 'Almacén eliminado exitosamente', warehouse });
-  } catch (error) {
-    res.status(500).json({ message: 'Error al eliminar almacén', error: (error as Error).message });
-  }
-};
-
+}
